@@ -1,6 +1,10 @@
 /**
- * This file is part of the makigas testcard - www.github.com/makigas/testcard
+ * Testcard CSS - Customizable test patterns for video production and OBS
+ * Original work by makigas testcard - www.github.com/makigas/testcard
  * Copyright (C) 2016-2017 Dani Rodríguez <danirod@outlook.com>
+ * 
+ * Modified for OBS streaming use with enhanced patterns and frame styles
+ * Last updated: April 7, 2025
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,7 +23,18 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ * 
+ * STRUCTURE:
+ * - Font and base styles: Basic typography and responsive settings
+ * - Testcard base styles: Core container properties
+ * - Frame styles: Different frame options (fluid, with-frame, minimal-frame, crt-frame)
+ * - SMPTE Color Bars: Standard SMPTE color test pattern elements
+ * - Pattern variants: Alternative test patterns (RGB, PAL)
+ * - Pretty Pattern: Animated color blocks pattern with palette swatches
+ * - UI Elements: Banner, date/time display styling
  */
+
+/* ---------- FONTS AND BASE STYLES ---------- */
 
 @font-face {
   font-family: 'VCR';
@@ -27,13 +42,12 @@
 }
 
 body {
-  background: linear-gradient(to bottom, #000000, #1a1a1a);
+  background: black;
   margin: 0;
   padding: 0;
   font-family: 'VCR', monospace;
   font-size: 8vh;
   color: #ffffff;
-  text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff;
 }
 
 @media all and (max-width: 640px) {
@@ -44,13 +58,41 @@ body {
   body { font-size: 4vh; }
 }
 
+/* ---------- TESTCARD BASE STYLES ---------- */
+
 div.testcard {
-  background: url('bars.png');
+  background-color: #000000;
   background-size: cover;
-  border: 5px solid #ffffff;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-  animation: pulse 5s infinite;
-  
+  position: relative;
+  overflow: hidden;
+}
+
+div.inner {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- FRAME STYLES ---------- */
+
+/* Fluid layout - fills the entire browser window */
+div.testcard.fluid {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: none;
+  box-shadow: none;
+}
+
+/* With frame - maintains aspect ratio and shows frame */
+div.testcard.with-frame {
   /* Landscape. */
   width: 100vw;
   height: 56.24vw;
@@ -58,6 +100,10 @@ div.testcard {
   /* Portrait. */
   max-width: 177.778vh;
   max-height: 100vh;
+  
+  /* Frame */
+  border: 5px solid #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
   
   /* Positioning. */
   margin: auto;
@@ -68,42 +114,474 @@ div.testcard {
   bottom: 0;
 }
 
-@keyframes pulse {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-  }
-  50% {
-    box-shadow: 0 0 40px rgba(255, 255, 255, 0.8);
-  }
+/* Minimal frame - maintains aspect ratio with minimal styling */
+div.testcard.minimal-frame {
+  /* Landscape. */
+  width: 100vw;
+  height: 56.24vw;
+  
+  /* Portrait. */
+  max-width: 177.778vh;
+  max-height: 100vh;
+  
+  /* Frame */
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  
+  /* Positioning. */
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
-div.inner {
+/* Retro CRT frame - adds CRT-like styling */
+div.testcard.crt-frame {
+  /* Landscape. */
+  width: 96vw;
+  height: 54vw;
+  
+  /* Portrait. */
+  max-width: 170vh;
+  max-height: 96vh;
+  
+  /* Frame */
+  border: 12px solid #222;
+  border-radius: 20px;
+  box-shadow: 
+    0 0 0 2px #111,
+    0 0 10px rgba(0, 150, 255, 0.2),
+    inset 0 0 15px rgba(0, 0, 0, 0.7);
+  
+  /* Positioning. */
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+div.testcard.crt-frame::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.2) 50%
+  );
+  background-size: 100% 4px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+div.testcard.crt-frame::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at center,
+    transparent 60%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ---------- SMPTE COLOR BARS ---------- */
+
+/* Color Bars */
+.color-bars {
+  position: absolute;
   width: 100%;
   height: 100%;
-  margin: 0;
-  padding: 0;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top color bars (75% intensity) */
+.top-bars {
+  display: flex;
+  flex: 2;
+}
+
+.bar {
+  flex: 1;
+  height: 100%;
+}
+
+/* 75% intensity color values for SMPTE NTSC */
+.gray { background-color: #CCCCCC; }      /* 75% White/Gray */
+.yellow { background-color: #CCCC00; }    /* 75% Yellow */
+.cyan { background-color: #00CCCC; }      /* 75% Cyan */
+.green { background-color: #00CC00; }     /* 75% Green */
+.magenta { background-color: #CC00CC; }   /* 75% Magenta */
+.red { background-color: #CC0000; }       /* 75% Red */
+.blue { background-color: #0000CC; }      /* 75% Blue */
+
+/* Castellations section */
+.castellations {
+  display: flex;
+  flex: 0.25;
+}
+
+.blue-castellation { 
+  flex: 1;
+  background-color: #0000CC;  /* Blue portion */
+}
+
+.black-castellation { 
+  flex: 1;
+  background-color: #131313;  /* Black portion */
+}
+
+.magenta-castellation { 
+  flex: 1;
+  background-color: #CC00CC;  /* Magenta portion */
+}
+
+.cyan-castellation { 
+  flex: 1;
+  background-color: #00CCCC;  /* Cyan portion */
+}
+
+.gray-castellation { 
+  flex: 1;
+  background-color: #CCCCCC;  /* Gray portion */
+}
+
+/* Bottom section */
+.bottom-section {
+  display: flex;
+  flex: 0.75;
+}
+
+/* -I, white, Q sections */
+.bottom-left {
+  flex: 3;
+  display: flex;
+}
+
+.i-section { 
+  flex: 1;
+  background-color: #000080;    /* -I (dark blue) */
+}
+
+.white-section {
+  flex: 1;
+  background-color: #FFFFFF;    /* 100% White */
+}
+
+.q-section {
+  flex: 1;
+  background-color: #300030;    /* +Q (dark purple) */
+}
+
+/* Black reference and PLUGE section */
+.bottom-right {
+  flex: 1;
+  background-color: #131313;    /* NTSC black level (7.5 IRE) */
   position: relative;
 }
 
+/* PLUGE bars positioned within the black rectangle */
+.pluge-section {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 33%;
+  display: flex;
+}
+
+.super-black {
+  flex: 1;
+  background-color: #090909;    /* Super-black (3.5 IRE) */
+}
+
+.reference-black {
+  flex: 1;
+  background-color: #131313;    /* NTSC black level (7.5 IRE) */
+}
+
+.above-black {
+  flex: 1;
+  background-color: #1D1D1D;    /* Above black (11.5 IRE) */
+}
+
+/* ---------- PATTERN VARIANTS ---------- */
+
+/* RGB Pattern (alternative pattern) */
+.pattern-rgb .top-bars .bar:nth-child(1) { background-color: #FF0000; } /* Red */
+.pattern-rgb .top-bars .bar:nth-child(2) { background-color: #00FF00; } /* Green */
+.pattern-rgb .top-bars .bar:nth-child(3) { background-color: #0000FF; } /* Blue */
+.pattern-rgb .top-bars .bar:nth-child(4) { background-color: #FFFFFF; } /* White */
+.pattern-rgb .top-bars .bar:nth-child(5) { background-color: #000000; } /* Black */
+.pattern-rgb .top-bars .bar:nth-child(6) { background-color: #FFFF00; } /* Yellow */
+.pattern-rgb .top-bars .bar:nth-child(7) { background-color: #FF00FF; } /* Magenta */
+
+/* RGB Pattern Castellations */
+.pattern-rgb .castellations .blue-castellation { background-color: #0000FF; }
+.pattern-rgb .castellations .black-castellation { background-color: #000000; }
+.pattern-rgb .castellations .magenta-castellation { background-color: #FF00FF; }
+.pattern-rgb .castellations .cyan-castellation { background-color: #00FFFF; }
+.pattern-rgb .castellations .gray-castellation { background-color: #FFFFFF; }
+
+/* RGB Pattern Bottom Section */
+.pattern-rgb .bottom-section .i-section { background-color: #FF0000; }
+.pattern-rgb .bottom-section .white-section { background-color: #00FF00; }
+.pattern-rgb .bottom-section .q-section { background-color: #0000FF; }
+
+/* PAL Pattern (another alternative pattern) */
+.pattern-pal .top-bars .bar:nth-child(1) { background-color: #FFFFFF; } /* 100% White */
+.pattern-pal .top-bars .bar:nth-child(2) { background-color: #FFFF00; } /* Yellow */
+.pattern-pal .top-bars .bar:nth-child(3) { background-color: #00FFFF; } /* Cyan */
+.pattern-pal .top-bars .bar:nth-child(4) { background-color: #00FF00; } /* Green */
+.pattern-pal .top-bars .bar:nth-child(5) { background-color: #FF00FF; } /* Magenta */
+.pattern-pal .top-bars .bar:nth-child(6) { background-color: #FF0000; } /* Red */
+.pattern-pal .top-bars .bar:nth-child(7) { background-color: #0000FF; } /* Blue */
+
+/* PAL Pattern Castellations */
+.pattern-pal .castellations { background-color: #202020; }
+.pattern-pal .castellations .blue-castellation,
+.pattern-pal .castellations .black-castellation,
+.pattern-pal .castellations .magenta-castellation,
+.pattern-pal .castellations .cyan-castellation,
+.pattern-pal .castellations .gray-castellation { background-color: #202020; }
+
+/* PAL Pattern Bottom Section */
+.pattern-pal .bottom-section .bottom-left { background-color: #000000; }
+.pattern-pal .bottom-section .i-section { background-color: #000000; }
+.pattern-pal .bottom-section .white-section { background-color: #404040; }
+.pattern-pal .bottom-section .q-section { background-color: #000000; }
+
+/* ---------- PRETTY PATTERN STYLES ---------- */
+
+.pretty-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Pretty Pattern - Row styles */
+.pretty-container .row {
+    display: flex;
+    width: 100%;
+}
+
+.pretty-container .color-block {
+    flex: 1; /* Distribute space equally */
+    position: relative; /* For pseudo-element borders */
+}
+
+/* Thin black borders between blocks */
+.pretty-container .color-block:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: #000;
+    z-index: 2; /* Ensure borders are above animation */
+}
+
+/* Row border - applied to containers */
+.pretty-container .top-row::after,
+.pretty-container .middle-section::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background-color: #000;
+    z-index: 2; /* Ensure borders are above animation */
+}
+
+/* --- Top Row --- */
+.pretty-container .top-row {
+    height: 40%;
+    position: relative; /* Needed for row::after border */
+}
+.pretty-container .top-row .white { background-color: #ffffff; }
+.pretty-container .top-row .yellow { background-color: #f9d931; }
+.pretty-container .top-row .light-blue { background-color: #69b8e4; }
+.pretty-container .top-row .green { background-color: #67a864; }
+.pretty-container .top-row .pink { background-color: #cc6ca6; }
+.pretty-container .top-row .red { background-color: #c42c1f; }
+.pretty-container .top-row .orange { background-color: #e5802c; }
+.pretty-container .top-row .blue { background-color: #4974c3; }
+
+/* --- Middle Section --- */
+.pretty-container .middle-section {
+    display: flex;
+    flex-direction: column;
+    position: relative; /* Needed for row::after border */
+    flex: 0.3;
+}
+
+.pretty-container .black-bar {
+    height: 40px; /* Adjust height */
+    background-color: #2b2b2b; /* Slightly lighter than pure black in image */
+    display: flex;
+    align-items: center;
+    justify-content: space-around; /* Distribute palettes */
+    padding: 0 10%; /* Add some padding to push palettes inwards */
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.4) inset; /* Inner shadow for depth */
+    position: relative; /* Ensure it's above the row below */
+    z-index: 1;
+}
+
+.pretty-container .palette {
+    display: flex;
+}
+
+.pretty-container .swatch {
+    width: 12px;
+    height: 12px;
+    margin-right: 3px; /* Space between swatches */
+    border: 1px solid #444; /* Subtle border on swatches */
+}
+.pretty-container .swatch:last-child {
+    margin-right: 0;
+}
+
+/* Palette 1 Colors */
+.pretty-container .s1-1 { background-color: #a1a1a1; }
+.pretty-container .s1-2 { background-color: #8f8f8f; }
+.pretty-container .s1-3 { background-color: #7e7e7e; }
+.pretty-container .s1-4 { background-color: #6c6c6c; }
+.pretty-container .s1-5 { background-color: #5a5a5a; }
+.pretty-container .s1-6 { background-color: #4974c3; } /* Blue from top */
+
+/* Palette 2 Colors */
+.pretty-container .s2-1 { background-color: #a75148; }
+.pretty-container .s2-2 { background-color: #984a40; }
+.pretty-container .s2-3 { background-color: #894238; }
+.pretty-container .s2-4 { background-color: #7a3b30; }
+.pretty-container .s2-5 { background-color: #6a3429; }
+.pretty-container .s2-6 { background-color: #e5802c; } /* Orange from top */
+
+/* Palette 3 Colors */
+.pretty-container .s3-1 { background-color: #754a68; }
+.pretty-container .s3-2 { background-color: #685d79; }
+.pretty-container .s3-3 { background-color: #5b708a; }
+.pretty-container .s3-4 { background-color: #4e839b; }
+.pretty-container .s3-5 { background-color: #4196ac; }
+.pretty-container .s3-6 { background-color: #67a864; } /* Green from top */
+
+.pretty-container .middle-row-below {
+    flex: 1;
+}
+/* These used gradients before, but hue-rotate works better on solid colors */
+/* Apply the *target* color of the gradient or a representative color */
+.pretty-container .middle-row-below .mrb-1 { background-color: #4974c3; }
+.pretty-container .middle-row-below .mrb-2 { background-color: #dca133; }
+.pretty-container .middle-row-below .mrb-3 { background-color: #cc6ca6; }
+.pretty-container .middle-row-below .mrb-4 { background-color: #4e528b; }
+.pretty-container .middle-row-below .mrb-5 { background-color: #56354b; } /* Dark Purple */
+.pretty-container .middle-row-below .mrb-6 { background-color: #822e26; } /* Dark Red */
+.pretty-container .middle-row-below .mrb-7 { background-color: #a06730; } /* Brown */
+.pretty-container .middle-row-below .mrb-8 { background-color: #3e537a; } /* Dark Blue */
+
+/* --- Bottom Row --- */
+.pretty-container .bottom-row {
+    height: 30%;
+}
+/* Bottom row has fewer blocks, so flex: 1 makes them wider */
+.pretty-container .bottom-row .bottom-1 { background-color: #000000; } /* Black won't show hue rotate */
+.pretty-container .bottom-row .bottom-2 { background-color: #484e54; } /* Grey shows minimal rotate */
+.pretty-container .bottom-row .bottom-3 { background-color: #91b89a; }
+.pretty-container .bottom-row .bottom-4 { background-color: #c0c1c1; } /* Light grey shows minimal rotate */
+.pretty-container .bottom-row .bottom-5 { background-color: #e6e0d4; } /* Off-white shows minimal rotate */
+.pretty-container .bottom-row .bottom-6 { background-color: #b4cce1; }
+
+/* Remove right border from last block in every row */
+.pretty-container .color-block:last-child::after {
+    display: none;
+}
+
+/* --- Animation --- */
+@keyframes hueRotateAnimation {
+    0% {
+        filter: hue-rotate(0deg);
+    }
+    100% {
+        filter: hue-rotate(360deg); /* A full rotation */
+    }
+}
+
+/* Apply base animation to all relevant blocks */
+.pretty-container .top-row .color-block,
+.pretty-container .middle-row-below .color-block,
+.pretty-container .bottom-row .color-block {
+    animation-name: hueRotateAnimation;
+    animation-duration: 10s; /* Duration for one full hue cycle */
+    animation-timing-function: linear; /* Smooth, constant speed */
+    animation-iteration-count: infinite; /* Loop forever */
+}
+
+/* --- Animation Delays (Offset) --- */
+
+/* Top Row Delays */
+.pretty-container .top-row .color-block:nth-child(1) { animation-delay: 0.0s; } /* White won't show */
+.pretty-container .top-row .color-block:nth-child(2) { animation-delay: 0.3s; }
+.pretty-container .top-row .color-block:nth-child(3) { animation-delay: 0.6s; }
+.pretty-container .top-row .color-block:nth-child(4) { animation-delay: 0.9s; }
+.pretty-container .top-row .color-block:nth-child(5) { animation-delay: 1.2s; }
+.pretty-container .top-row .color-block:nth-child(6) { animation-delay: 1.5s; }
+.pretty-container .top-row .color-block:nth-child(7) { animation-delay: 1.8s; }
+.pretty-container .top-row .color-block:nth-child(8) { animation-delay: 2.1s; }
+
+/* Middle Row Below Delays (Continue the sequence) */
+.pretty-container .middle-row-below .color-block:nth-child(1) { animation-delay: 2.4s; }
+.pretty-container .middle-row-below .color-block:nth-child(2) { animation-delay: 2.7s; }
+.pretty-container .middle-row-below .color-block:nth-child(3) { animation-delay: 3.0s; }
+.pretty-container .middle-row-below .color-block:nth-child(4) { animation-delay: 3.3s; }
+.pretty-container .middle-row-below .color-block:nth-child(5) { animation-delay: 3.6s; }
+.pretty-container .middle-row-below .color-block:nth-child(6) { animation-delay: 3.9s; }
+.pretty-container .middle-row-below .color-block:nth-child(7) { animation-delay: 4.2s; }
+.pretty-container .middle-row-below .color-block:nth-child(8) { animation-delay: 4.5s; }
+
+/* Bottom Row Delays (Continue the sequence) */
+.pretty-container .bottom-row .color-block:nth-child(1) { animation-delay: 4.8s; } /* Black won't show */
+.pretty-container .bottom-row .color-block:nth-child(2) { animation-delay: 5.1s; } /* Grey might show subtle shift */
+.pretty-container .bottom-row .color-block:nth-child(3) { animation-delay: 5.4s; }
+.pretty-container .bottom-row .color-block:nth-child(4) { animation-delay: 5.7s; } /* Light grey might show subtle shift */
+.pretty-container .bottom-row .color-block:nth-child(5) { animation-delay: 6.0s; } /* Off-white might show subtle shift */
+.pretty-container .bottom-row .color-block:nth-child(6) { animation-delay: 6.3s; }
+
+/* ---------- UI ELEMENTS ---------- */
+
 p {
   background: rgba(0, 0, 0, 0.8);
-  color: #ffffff;
+  color: white;
   padding: 2vh 4vh;
   display: inline-block;
   cursor: default;
-  border-radius: 5px;
+  border-radius: 0;
   font-weight: bold;
   text-align: center;
-  animation: fadeIn 1s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: 2px solid #ffffff;
 }
 
 #banner {
@@ -114,10 +592,7 @@ p {
   font-size: 1.2em;
   text-transform: uppercase;
   letter-spacing: 2px;
-}
-
-#date, #time {
-  font-size: 1em;
+  background-color: #000000;
 }
 
 #date {

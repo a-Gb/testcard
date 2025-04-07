@@ -1,6 +1,10 @@
 /**
- * This file is part of the makigas testcard - www.github.com/makigas/testcard
+ * Testcard - Customizable test patterns for video production and OBS
+ * Original work by makigas testcard - www.github.com/makigas/testcard
  * Copyright (C) 2016-2017 Dani Rodríguez <danirod@outlook.com>
+ * 
+ * Modified for OBS streaming use with enhanced patterns and frame styles
+ * Last updated: April 7, 2025
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,25 +23,47 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ * 
+ * USAGE:
+ * - Add to OBS as a browser source
+ * - Configure URL parameters for customization:
+ *   - pattern=smpte|rgb|pal|pretty (test pattern type)
+ *   - frame=default|minimal|crt|none (frame style)
+ *   - banner=Your%20Text%20Here (custom banner text)
  */
 
 (function(window, document) {
+  /**
+   * Safely decode HTML entities
+   * @param {string} t - The string to decode
+   * @returns {string} The decoded string
+   */
   var decode = function(t) {
     var ta = document.createElement("textarea");
     ta.innerHTML = t;
     return ta.value;
   };
   
+  /**
+   * Parse the query string into an object of parameters
+   * @returns {Object} Object containing query parameters
+   */
   var queryString = function() {
     var qs = window.location.search.substring(1).split('&');
     var params = { };
     qs.forEach(function(q) {
-      params[q.split('=')[0]] = q.split('=')[1]
+      if (q.includes('=')) {
+        var parts = q.split('=');
+        params[parts[0]] = parts[1];
+      }
     });
     return params;
   };
 
-  var recall = function() {
+  /**
+   * Update the clock display
+   */
+  var updateClock = function() {
     var date = new Date();
     var hours = date.getHours();
     var minutes = date.getMinutes();
@@ -61,6 +87,9 @@
     document.getElementById('date').innerHTML = day;
   };
 
+  /**
+   * Toggle the testcard visibility
+   */
   var toggleTestcard = function() {
     var testcard = document.querySelector('.testcard');
     if (testcard.style.display === 'none') {
@@ -70,18 +99,91 @@
     }
   };
 
+  // Register keyboard event handler for toggling testcard with 't'
   document.addEventListener('keydown', function(event) {
     if (event.key === 't') {
       toggleTestcard();
     }
   });
 
-  if (queryString().banner) {
-    document.getElementById('banner').innerHTML = decodeURI(queryString().banner);
+  // Get URL parameters
+  var params = queryString();
+  var testcard = document.querySelector('.testcard');
+
+  // Apply frame style based on URL parameters
+  var frameParam = params.frame;
+  
+  // Handle different frame style options
+  if (frameParam) {
+    // Remove any existing frame classes
+    testcard.classList.remove('fluid', 'with-frame', 'minimal-frame', 'crt-frame');
+    
+    if (frameParam === 'true' || frameParam === 'yes' || frameParam === '1' || frameParam === 'default') {
+      testcard.classList.add('with-frame');
+    } else if (frameParam === 'minimal') {
+      testcard.classList.add('minimal-frame');
+    } else if (frameParam === 'crt') {
+      testcard.classList.add('crt-frame');
+    } else if (frameParam === 'none' || frameParam === 'false' || frameParam === '0') {
+      testcard.classList.add('fluid');
+    } else {
+      // Default to fluid if unrecognized value
+      testcard.classList.add('fluid');
+    }
   } else {
-    document.getElementById('banner').remove();
+    // Default to fluid if no frame parameter
+    testcard.classList.add('fluid');
   }
 
-  recall();
-  window.setInterval(recall, 50); // Update every 50ms for subsecond precision
+  // Apply pattern if specified in URL
+  if (params.pattern) {
+    // Remove any existing pattern classes
+    testcard.classList.remove('pattern-smpte', 'pattern-pal', 'pattern-rgb', 'pattern-pretty');
+    
+    // Add the requested pattern class
+    testcard.classList.add('pattern-' + params.pattern);
+    
+    // If it's the pretty pattern, show the pretty container and hide regular color bars
+    if (params.pattern === 'pretty') {
+      var prettyContainer = document.querySelector('.pretty-container');
+      var colorBars = document.querySelector('.color-bars');
+      
+      if (prettyContainer && colorBars) {
+        prettyContainer.style.display = 'flex';
+        colorBars.style.display = 'none';
+      }
+    }
+    
+    // Update banner text with pattern name if no banner specified
+    if (!params.banner) {
+      var patternName = params.pattern.toUpperCase();
+      var bannerEl = document.getElementById('banner');
+      if (bannerEl) {
+        bannerEl.innerHTML = patternName + ' TEST PATTERN';
+      }
+    }
+  } else {
+    // Default to SMPTE pattern
+    testcard.classList.add('pattern-smpte');
+  }
+
+  // Handle banner parameter
+  if (params.banner) {
+    var bannerEl = document.getElementById('banner');
+    if (bannerEl) {
+      bannerEl.innerHTML = decodeURI(params.banner);
+    }
+  } else if (!params.pattern) {
+    // Remove banner if neither banner nor pattern is specified
+    var bannerEl = document.getElementById('banner');
+    if (bannerEl) {
+      bannerEl.remove();
+    }
+  }
+
+  // Initialize the clock
+  updateClock();
+  
+  // Update every 50ms for subsecond precision
+  window.setInterval(updateClock, 50);
 })(window, document);
