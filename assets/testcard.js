@@ -42,6 +42,7 @@
     var hours = date.getHours();
     var minutes = date.getMinutes();
     var seconds = date.getSeconds();
+    var milliseconds = date.getMilliseconds();
     var day = date.getDate();
     var month = date.getMonth() + 1;
     var year = date.getYear() % 100;
@@ -49,15 +50,31 @@
     var hh = (hours < 10) ? '0' + hours : hours;
     var mm = (minutes < 10) ? '0' + minutes : minutes;
     var ss = (seconds < 10) ? '0' + seconds : seconds;
+    var ms = ('00' + milliseconds).slice(-3);
     var dd = (day < 10) ? '0' + day : day;
     var ii = (month < 10) ? '0' + month : month;
     var yy = (year < 10) ? '0' + year : year;
 
     var day = dd + '/' + ii + '/' + yy;
-    var hour = hh + ':' + mm + ':' + ss;
+    var hour = hh + ':' + mm + ':' + ss + '.' + ms;
     document.getElementById('time').innerHTML = hour;
     document.getElementById('date').innerHTML = day;
   };
+
+  var toggleTestcard = function() {
+    var testcard = document.querySelector('.testcard');
+    if (testcard.style.display === 'none') {
+      testcard.style.display = 'block';
+    } else {
+      testcard.style.display = 'none';
+    }
+  };
+
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 't') {
+      toggleTestcard();
+    }
+  });
 
   if (queryString().banner) {
     document.getElementById('banner').innerHTML = decodeURI(queryString().banner);
@@ -66,5 +83,5 @@
   }
 
   recall();
-  window.setInterval(recall, 250);
+  window.setInterval(recall, 50); // Update every 50ms for subsecond precision
 })(window, document);
