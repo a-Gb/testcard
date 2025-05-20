@@ -34,6 +34,101 @@
  * - UI Elements: Banner, date/time display styling
  */
 
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --black-rgb: 0, 0, 0;
+  --white-rgb: 255, 255, 255;
+
+  /* SMPTE Colors */
+  --smpte-gray: #CCCCCC;
+  --smpte-yellow: #CCCC00;
+  --smpte-cyan: #00CCCC;
+  --smpte-green: #00CC00;
+  --smpte-magenta: #CC00CC;
+  --smpte-red: #CC0000;
+  --smpte-blue: #0000CC;
+  --smpte-black-level: #131313;
+  --smpte-i-signal: #000080; /* Dark Blue */
+  --smpte-q-signal: #300030; /* Dark Purple */
+  --smpte-super-black: #090909;
+  --smpte-above-black: #1D1D1D;
+
+  /* RGB/PAL Primary Colors (often shared) */
+  --primary-red: #FF0000;
+  --primary-green: #00FF00;
+  --primary-blue: #0000FF;
+  --primary-yellow: #FFFF00;
+  --primary-magenta: #FF00FF;
+  --primary-cyan: #00FFFF;
+
+  /* PAL Specific */
+  --pal-castellation-bg: #202020;
+  --pal-middle-gray: #404040;
+
+  /* CRT Frame Colors */
+  --crt-border-dark: #222;
+  --crt-border-darker: #111;
+  --crt-glow-blue-val: 0, 150, 255; /* For rgba */
+
+  /* Pretty Pattern Base Colors */
+  --pretty-yellow: #f9d931;
+  --pretty-light-blue: #69b8e4;
+  --pretty-green: #67a864;
+  --pretty-pink: #cc6ca6;
+  --pretty-red: #c42c1f;
+  --pretty-orange: #e5802c;
+  --pretty-blue: #4974c3;
+  --pretty-black-bar: #2b2b2b;
+  --pretty-swatch-border: #444;
+  
+  /* Pretty Pattern - Palette 1 */
+  --pretty-s1-1: #a1a1a1;
+  --pretty-s1-2: #8f8f8f;
+  --pretty-s1-3: #7e7e7e;
+  --pretty-s1-4: #6c6c6c;
+  --pretty-s1-5: #5a5a5a;
+  /* --pretty-s1-6 is --pretty-blue */
+
+  /* Pretty Pattern - Palette 2 */
+  --pretty-s2-1: #a75148;
+  --pretty-s2-2: #984a40;
+  --pretty-s2-3: #894238;
+  --pretty-s2-4: #7a3b30;
+  --pretty-s2-5: #6a3429;
+  /* --pretty-s2-6 is --pretty-orange */
+
+  /* Pretty Pattern - Palette 3 */
+  --pretty-s3-1: #754a68;
+  --pretty-s3-2: #685d79;
+  --pretty-s3-3: #5b708a;
+  --pretty-s3-4: #4e839b;
+  --pretty-s3-5: #4196ac;
+  /* --pretty-s3-6 is --pretty-green */
+  
+  /* Pretty Pattern - Middle Row Below */
+  /* --pretty-mrb-1 is --pretty-blue */
+  --pretty-mrb-2: #dca133;
+  /* --pretty-mrb-3 is --pretty-pink */
+  --pretty-mrb-4: #4e528b;
+  --pretty-mrb-5: #56354b; /* Dark Purple */
+  --pretty-mrb-6: #822e26; /* Dark Red */
+  --pretty-mrb-7: #a06730; /* Brown */
+  --pretty-mrb-8: #3e537a; /* Dark Blue */
+
+  /* Pretty Pattern - Bottom Row */
+  /* --pretty-bottom-1 is --black */
+  --pretty-bottom-2: #484e54; /* Grey */
+  --pretty-bottom-3: #91b89a;
+  --pretty-bottom-4: #c0c1c1; /* Light grey */
+  --pretty-bottom-5: #e6e0d4; /* Off-white */
+  --pretty-bottom-6: #b4cce1;
+
+  /* UI Elements */
+  --ui-text-bg: rgba(var(--black-rgb), 0.8);
+  --ui-border: var(--white);
+}
+
 /* ---------- FONTS AND BASE STYLES ---------- */
 
 @font-face {
@@ -42,12 +137,12 @@
 }
 
 body {
-  background: black;
+  background: var(--black);
   margin: 0;
   padding: 0;
   font-family: 'VCR', monospace;
   font-size: 8vh;
-  color: #ffffff;
+  color: var(--white);
 }
 
 @media all and (max-width: 640px) {
@@ -61,7 +156,7 @@ body {
 /* ---------- TESTCARD BASE STYLES ---------- */
 
 div.testcard {
-  background-color: #000000;
+  background-color: var(--black);
   background-size: cover;
   position: relative;
   overflow: hidden;
@@ -102,8 +197,8 @@ div.testcard.with-frame {
   max-height: 100vh;
   
   /* Frame */
-  border: 5px solid #ffffff;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  border: 5px solid var(--white);
+  box-shadow: 0 0 10px rgba(var(--white-rgb), 0.3);
   
   /* Positioning. */
   margin: auto;
@@ -125,7 +220,7 @@ div.testcard.minimal-frame {
   max-height: 100vh;
   
   /* Frame */
-  border: 2px solid rgba(255, 255, 255, 0.5);
+  border: 2px solid rgba(var(--white-rgb), 0.5);
   
   /* Positioning. */
   margin: auto;
@@ -147,12 +242,12 @@ div.testcard.crt-frame {
   max-height: 96vh;
   
   /* Frame */
-  border: 12px solid #222;
+  border: 12px solid var(--crt-border-dark);
   border-radius: 20px;
   box-shadow: 
-    0 0 0 2px #111,
-    0 0 10px rgba(0, 150, 255, 0.2),
-    inset 0 0 15px rgba(0, 0, 0, 0.7);
+    0 0 0 2px var(--crt-border-darker),
+    0 0 10px rgba(var(--crt-glow-blue-val), 0.2),
+    inset 0 0 15px rgba(var(--black-rgb), 0.7);
   
   /* Positioning. */
   margin: auto;
@@ -172,8 +267,8 @@ div.testcard.crt-frame::before {
   right: 0;
   bottom: 0;
   background: linear-gradient(
-    rgba(18, 16, 16, 0) 50%, 
-    rgba(0, 0, 0, 0.2) 50%
+    rgba(18, 16, 16, 0) 50%, /* Assuming this is a specific effect, leaving as is or could be a var if re-used */
+    rgba(var(--black-rgb), 0.2) 50%
   );
   background-size: 100% 4px;
   z-index: 2;
@@ -190,7 +285,7 @@ div.testcard.crt-frame::after {
   background: radial-gradient(
     circle at center,
     transparent 60%,
-    rgba(0, 0, 0, 0.3) 100%
+    rgba(var(--black-rgb), 0.3) 100%
   );
   z-index: 2;
   pointer-events: none;
@@ -222,13 +317,13 @@ div.testcard.crt-frame::after {
 }
 
 /* 75% intensity color values for SMPTE NTSC */
-.gray { background-color: #CCCCCC; }      /* 75% White/Gray */
-.yellow { background-color: #CCCC00; }    /* 75% Yellow */
-.cyan { background-color: #00CCCC; }      /* 75% Cyan */
-.green { background-color: #00CC00; }     /* 75% Green */
-.magenta { background-color: #CC00CC; }   /* 75% Magenta */
-.red { background-color: #CC0000; }       /* 75% Red */
-.blue { background-color: #0000CC; }      /* 75% Blue */
+.gray { background-color: var(--smpte-gray); }      /* 75% White/Gray */
+.yellow { background-color: var(--smpte-yellow); }    /* 75% Yellow */
+.cyan { background-color: var(--smpte-cyan); }      /* 75% Cyan */
+.green { background-color: var(--smpte-green); }     /* 75% Green */
+.magenta { background-color: var(--smpte-magenta); }   /* 75% Magenta */
+.red { background-color: var(--smpte-red); }       /* 75% Red */
+.blue { background-color: var(--smpte-blue); }      /* 75% Blue */
 
 /* Castellations section */
 .castellations {
@@ -238,27 +333,27 @@ div.testcard.crt-frame::after {
 
 .blue-castellation { 
   flex: 1;
-  background-color: #0000CC;  /* Blue portion */
+  background-color: var(--smpte-blue);  /* Blue portion */
 }
 
 .black-castellation { 
   flex: 1;
-  background-color: #131313;  /* Black portion */
+  background-color: var(--smpte-black-level);  /* Black portion */
 }
 
 .magenta-castellation { 
   flex: 1;
-  background-color: #CC00CC;  /* Magenta portion */
+  background-color: var(--smpte-magenta);  /* Magenta portion */
 }
 
 .cyan-castellation { 
   flex: 1;
-  background-color: #00CCCC;  /* Cyan portion */
+  background-color: var(--smpte-cyan);  /* Cyan portion */
 }
 
 .gray-castellation { 
   flex: 1;
-  background-color: #CCCCCC;  /* Gray portion */
+  background-color: var(--smpte-gray);  /* Gray portion */
 }
 
 /* Bottom section */
@@ -275,23 +370,23 @@ div.testcard.crt-frame::after {
 
 .i-section { 
   flex: 1;
-  background-color: #000080;    /* -I (dark blue) */
+  background-color: var(--smpte-i-signal);    /* -I (dark blue) */
 }
 
 .white-section {
   flex: 1;
-  background-color: #FFFFFF;    /* 100% White */
+  background-color: var(--white);    /* 100% White */
 }
 
 .q-section {
   flex: 1;
-  background-color: #300030;    /* +Q (dark purple) */
+  background-color: var(--smpte-q-signal);    /* +Q (dark purple) */
 }
 
 /* Black reference and PLUGE section */
 .bottom-right {
   flex: 1;
-  background-color: #131313;    /* NTSC black level (7.5 IRE) */
+  background-color: var(--smpte-black-level);    /* NTSC black level (7.5 IRE) */
   position: relative;
 }
 
@@ -307,64 +402,64 @@ div.testcard.crt-frame::after {
 
 .super-black {
   flex: 1;
-  background-color: #090909;    /* Super-black (3.5 IRE) */
+  background-color: var(--smpte-super-black);    /* Super-black (3.5 IRE) */
 }
 
 .reference-black {
   flex: 1;
-  background-color: #131313;    /* NTSC black level (7.5 IRE) */
+  background-color: var(--smpte-black-level);    /* NTSC black level (7.5 IRE) */
 }
 
 .above-black {
   flex: 1;
-  background-color: #1D1D1D;    /* Above black (11.5 IRE) */
+  background-color: var(--smpte-above-black);    /* Above black (11.5 IRE) */
 }
 
 /* ---------- PATTERN VARIANTS ---------- */
 
 /* RGB Pattern (alternative pattern) */
-.pattern-rgb .top-bars .bar:nth-child(1) { background-color: #FF0000; } /* Red */
-.pattern-rgb .top-bars .bar:nth-child(2) { background-color: #00FF00; } /* Green */
-.pattern-rgb .top-bars .bar:nth-child(3) { background-color: #0000FF; } /* Blue */
-.pattern-rgb .top-bars .bar:nth-child(4) { background-color: #FFFFFF; } /* White */
-.pattern-rgb .top-bars .bar:nth-child(5) { background-color: #000000; } /* Black */
-.pattern-rgb .top-bars .bar:nth-child(6) { background-color: #FFFF00; } /* Yellow */
-.pattern-rgb .top-bars .bar:nth-child(7) { background-color: #FF00FF; } /* Magenta */
+.pattern-rgb .top-bars .bar:nth-child(1) { background-color: var(--primary-red); } /* Red */
+.pattern-rgb .top-bars .bar:nth-child(2) { background-color: var(--primary-green); } /* Green */
+.pattern-rgb .top-bars .bar:nth-child(3) { background-color: var(--primary-blue); } /* Blue */
+.pattern-rgb .top-bars .bar:nth-child(4) { background-color: var(--white); } /* White */
+.pattern-rgb .top-bars .bar:nth-child(5) { background-color: var(--black); } /* Black */
+.pattern-rgb .top-bars .bar:nth-child(6) { background-color: var(--primary-yellow); } /* Yellow */
+.pattern-rgb .top-bars .bar:nth-child(7) { background-color: var(--primary-magenta); } /* Magenta */
 
 /* RGB Pattern Castellations */
-.pattern-rgb .castellations .blue-castellation { background-color: #0000FF; }
-.pattern-rgb .castellations .black-castellation { background-color: #000000; }
-.pattern-rgb .castellations .magenta-castellation { background-color: #FF00FF; }
-.pattern-rgb .castellations .cyan-castellation { background-color: #00FFFF; }
-.pattern-rgb .castellations .gray-castellation { background-color: #FFFFFF; }
+.pattern-rgb .castellations .blue-castellation { background-color: var(--primary-blue); }
+.pattern-rgb .castellations .black-castellation { background-color: var(--black); }
+.pattern-rgb .castellations .magenta-castellation { background-color: var(--primary-magenta); }
+.pattern-rgb .castellations .cyan-castellation { background-color: var(--primary-cyan); }
+.pattern-rgb .castellations .gray-castellation { background-color: var(--white); } /* White instead of smpte-gray for full intensity */
 
 /* RGB Pattern Bottom Section */
-.pattern-rgb .bottom-section .i-section { background-color: #FF0000; }
-.pattern-rgb .bottom-section .white-section { background-color: #00FF00; }
-.pattern-rgb .bottom-section .q-section { background-color: #0000FF; }
+.pattern-rgb .bottom-section .i-section { background-color: var(--primary-red); }
+.pattern-rgb .bottom-section .white-section { background-color: var(--primary-green); }
+.pattern-rgb .bottom-section .q-section { background-color: var(--primary-blue); }
 
 /* PAL Pattern (another alternative pattern) */
-.pattern-pal .top-bars .bar:nth-child(1) { background-color: #FFFFFF; } /* 100% White */
-.pattern-pal .top-bars .bar:nth-child(2) { background-color: #FFFF00; } /* Yellow */
-.pattern-pal .top-bars .bar:nth-child(3) { background-color: #00FFFF; } /* Cyan */
-.pattern-pal .top-bars .bar:nth-child(4) { background-color: #00FF00; } /* Green */
-.pattern-pal .top-bars .bar:nth-child(5) { background-color: #FF00FF; } /* Magenta */
-.pattern-pal .top-bars .bar:nth-child(6) { background-color: #FF0000; } /* Red */
-.pattern-pal .top-bars .bar:nth-child(7) { background-color: #0000FF; } /* Blue */
+.pattern-pal .top-bars .bar:nth-child(1) { background-color: var(--white); } /* 100% White */
+.pattern-pal .top-bars .bar:nth-child(2) { background-color: var(--primary-yellow); } /* Yellow */
+.pattern-pal .top-bars .bar:nth-child(3) { background-color: var(--primary-cyan); } /* Cyan */
+.pattern-pal .top-bars .bar:nth-child(4) { background-color: var(--primary-green); } /* Green */
+.pattern-pal .top-bars .bar:nth-child(5) { background-color: var(--primary-magenta); } /* Magenta */
+.pattern-pal .top-bars .bar:nth-child(6) { background-color: var(--primary-red); } /* Red */
+.pattern-pal .top-bars .bar:nth-child(7) { background-color: var(--primary-blue); } /* Blue */
 
 /* PAL Pattern Castellations */
-.pattern-pal .castellations { background-color: #202020; }
+.pattern-pal .castellations { background-color: var(--pal-castellation-bg); }
 .pattern-pal .castellations .blue-castellation,
 .pattern-pal .castellations .black-castellation,
 .pattern-pal .castellations .magenta-castellation,
 .pattern-pal .castellations .cyan-castellation,
-.pattern-pal .castellations .gray-castellation { background-color: #202020; }
+.pattern-pal .castellations .gray-castellation { background-color: var(--pal-castellation-bg); }
 
 /* PAL Pattern Bottom Section */
-.pattern-pal .bottom-section .bottom-left { background-color: #000000; }
-.pattern-pal .bottom-section .i-section { background-color: #000000; }
-.pattern-pal .bottom-section .white-section { background-color: #404040; }
-.pattern-pal .bottom-section .q-section { background-color: #000000; }
+.pattern-pal .bottom-section .bottom-left { background-color: var(--black); }
+.pattern-pal .bottom-section .i-section { background-color: var(--black); }
+.pattern-pal .bottom-section .white-section { background-color: var(--pal-middle-gray); }
+.pattern-pal .bottom-section .q-section { background-color: var(--black); }
 
 /* ---------- PRETTY PATTERN STYLES ---------- */
 
@@ -398,7 +493,7 @@ div.testcard.crt-frame::after {
     right: 0;
     bottom: 0;
     width: 1px;
-    background-color: #000;
+    background-color: var(--black);
     z-index: 2; /* Ensure borders are above animation */
 }
 
@@ -411,7 +506,7 @@ div.testcard.crt-frame::after {
     right: 0;
     bottom: 0;
     height: 1px;
-    background-color: #000;
+    background-color: var(--black);
     z-index: 2; /* Ensure borders are above animation */
 }
 
@@ -420,14 +515,14 @@ div.testcard.crt-frame::after {
     height: 40%;
     position: relative; /* Needed for row::after border */
 }
-.pretty-container .top-row .white { background-color: #ffffff; }
-.pretty-container .top-row .yellow { background-color: #f9d931; }
-.pretty-container .top-row .light-blue { background-color: #69b8e4; }
-.pretty-container .top-row .green { background-color: #67a864; }
-.pretty-container .top-row .pink { background-color: #cc6ca6; }
-.pretty-container .top-row .red { background-color: #c42c1f; }
-.pretty-container .top-row .orange { background-color: #e5802c; }
-.pretty-container .top-row .blue { background-color: #4974c3; }
+.pretty-container .top-row .white { background-color: var(--white); }
+.pretty-container .top-row .yellow { background-color: var(--pretty-yellow); }
+.pretty-container .top-row .light-blue { background-color: var(--pretty-light-blue); }
+.pretty-container .top-row .green { background-color: var(--pretty-green); }
+.pretty-container .top-row .pink { background-color: var(--pretty-pink); }
+.pretty-container .top-row .red { background-color: var(--pretty-red); }
+.pretty-container .top-row .orange { background-color: var(--pretty-orange); }
+.pretty-container .top-row .blue { background-color: var(--pretty-blue); }
 
 /* --- Middle Section --- */
 .pretty-container .middle-section {
@@ -439,12 +534,12 @@ div.testcard.crt-frame::after {
 
 .pretty-container .black-bar {
     height: 40px; /* Adjust height */
-    background-color: #2b2b2b; /* Slightly lighter than pure black in image */
+    background-color: var(--pretty-black-bar); /* Slightly lighter than pure black in image */
     display: flex;
     align-items: center;
     justify-content: space-around; /* Distribute palettes */
     padding: 0 10%; /* Add some padding to push palettes inwards */
-    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.4) inset; /* Inner shadow for depth */
+    box-shadow: 0 3px 5px rgba(var(--black-rgb), 0.4) inset; /* Inner shadow for depth */
     position: relative; /* Ensure it's above the row below */
     z-index: 1;
 }
@@ -457,61 +552,61 @@ div.testcard.crt-frame::after {
     width: 12px;
     height: 12px;
     margin-right: 3px; /* Space between swatches */
-    border: 1px solid #444; /* Subtle border on swatches */
+    border: 1px solid var(--pretty-swatch-border); /* Subtle border on swatches */
 }
 .pretty-container .swatch:last-child {
     margin-right: 0;
 }
 
 /* Palette 1 Colors */
-.pretty-container .s1-1 { background-color: #a1a1a1; }
-.pretty-container .s1-2 { background-color: #8f8f8f; }
-.pretty-container .s1-3 { background-color: #7e7e7e; }
-.pretty-container .s1-4 { background-color: #6c6c6c; }
-.pretty-container .s1-5 { background-color: #5a5a5a; }
-.pretty-container .s1-6 { background-color: #4974c3; } /* Blue from top */
+.pretty-container .s1-1 { background-color: var(--pretty-s1-1); }
+.pretty-container .s1-2 { background-color: var(--pretty-s1-2); }
+.pretty-container .s1-3 { background-color: var(--pretty-s1-3); }
+.pretty-container .s1-4 { background-color: var(--pretty-s1-4); }
+.pretty-container .s1-5 { background-color: var(--pretty-s1-5); }
+.pretty-container .s1-6 { background-color: var(--pretty-blue); } /* Blue from top */
 
 /* Palette 2 Colors */
-.pretty-container .s2-1 { background-color: #a75148; }
-.pretty-container .s2-2 { background-color: #984a40; }
-.pretty-container .s2-3 { background-color: #894238; }
-.pretty-container .s2-4 { background-color: #7a3b30; }
-.pretty-container .s2-5 { background-color: #6a3429; }
-.pretty-container .s2-6 { background-color: #e5802c; } /* Orange from top */
+.pretty-container .s2-1 { background-color: var(--pretty-s2-1); }
+.pretty-container .s2-2 { background-color: var(--pretty-s2-2); }
+.pretty-container .s2-3 { background-color: var(--pretty-s2-3); }
+.pretty-container .s2-4 { background-color: var(--pretty-s2-4); }
+.pretty-container .s2-5 { background-color: var(--pretty-s2-5); }
+.pretty-container .s2-6 { background-color: var(--pretty-orange); } /* Orange from top */
 
 /* Palette 3 Colors */
-.pretty-container .s3-1 { background-color: #754a68; }
-.pretty-container .s3-2 { background-color: #685d79; }
-.pretty-container .s3-3 { background-color: #5b708a; }
-.pretty-container .s3-4 { background-color: #4e839b; }
-.pretty-container .s3-5 { background-color: #4196ac; }
-.pretty-container .s3-6 { background-color: #67a864; } /* Green from top */
+.pretty-container .s3-1 { background-color: var(--pretty-s3-1); }
+.pretty-container .s3-2 { background-color: var(--pretty-s3-2); }
+.pretty-container .s3-3 { background-color: var(--pretty-s3-3); }
+.pretty-container .s3-4 { background-color: var(--pretty-s3-4); }
+.pretty-container .s3-5 { background-color: var(--pretty-s3-5); }
+.pretty-container .s3-6 { background-color: var(--pretty-green); } /* Green from top */
 
 .pretty-container .middle-row-below {
     flex: 1;
 }
 /* These used gradients before, but hue-rotate works better on solid colors */
 /* Apply the *target* color of the gradient or a representative color */
-.pretty-container .middle-row-below .mrb-1 { background-color: #4974c3; }
-.pretty-container .middle-row-below .mrb-2 { background-color: #dca133; }
-.pretty-container .middle-row-below .mrb-3 { background-color: #cc6ca6; }
-.pretty-container .middle-row-below .mrb-4 { background-color: #4e528b; }
-.pretty-container .middle-row-below .mrb-5 { background-color: #56354b; } /* Dark Purple */
-.pretty-container .middle-row-below .mrb-6 { background-color: #822e26; } /* Dark Red */
-.pretty-container .middle-row-below .mrb-7 { background-color: #a06730; } /* Brown */
-.pretty-container .middle-row-below .mrb-8 { background-color: #3e537a; } /* Dark Blue */
+.pretty-container .middle-row-below .mrb-1 { background-color: var(--pretty-blue); }
+.pretty-container .middle-row-below .mrb-2 { background-color: var(--pretty-mrb-2); }
+.pretty-container .middle-row-below .mrb-3 { background-color: var(--pretty-pink); }
+.pretty-container .middle-row-below .mrb-4 { background-color: var(--pretty-mrb-4); }
+.pretty-container .middle-row-below .mrb-5 { background-color: var(--pretty-mrb-5); } /* Dark Purple */
+.pretty-container .middle-row-below .mrb-6 { background-color: var(--pretty-mrb-6); } /* Dark Red */
+.pretty-container .middle-row-below .mrb-7 { background-color: var(--pretty-mrb-7); } /* Brown */
+.pretty-container .middle-row-below .mrb-8 { background-color: var(--pretty-mrb-8); } /* Dark Blue */
 
 /* --- Bottom Row --- */
 .pretty-container .bottom-row {
     height: 30%;
 }
 /* Bottom row has fewer blocks, so flex: 1 makes them wider */
-.pretty-container .bottom-row .bottom-1 { background-color: #000000; } /* Black won't show hue rotate */
-.pretty-container .bottom-row .bottom-2 { background-color: #484e54; } /* Grey shows minimal rotate */
-.pretty-container .bottom-row .bottom-3 { background-color: #91b89a; }
-.pretty-container .bottom-row .bottom-4 { background-color: #c0c1c1; } /* Light grey shows minimal rotate */
-.pretty-container .bottom-row .bottom-5 { background-color: #e6e0d4; } /* Off-white shows minimal rotate */
-.pretty-container .bottom-row .bottom-6 { background-color: #b4cce1; }
+.pretty-container .bottom-row .bottom-1 { background-color: var(--black); } /* Black won't show hue rotate */
+.pretty-container .bottom-row .bottom-2 { background-color: var(--pretty-bottom-2); } /* Grey shows minimal rotate */
+.pretty-container .bottom-row .bottom-3 { background-color: var(--pretty-bottom-3); }
+.pretty-container .bottom-row .bottom-4 { background-color: var(--pretty-bottom-4); } /* Light grey shows minimal rotate */
+.pretty-container .bottom-row .bottom-5 { background-color: var(--pretty-bottom-5); } /* Off-white shows minimal rotate */
+.pretty-container .bottom-row .bottom-6 { background-color: var(--pretty-bottom-6); }
 
 /* Remove right border from last block in every row */
 .pretty-container .color-block:last-child::after {
@@ -568,11 +663,38 @@ div.testcard.crt-frame::after {
 .pretty-container .bottom-row .color-block:nth-child(5) { animation-delay: 6.0s; } /* Off-white might show subtle shift */
 .pretty-container .bottom-row .color-block:nth-child(6) { animation-delay: 6.3s; }
 
+/* ---------- CHECKERBOARD PATTERN STYLES ---------- */
+
+.checkerboard-pattern {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  display: grid; /* Using CSS Grid for the checkerboard */
+  grid-template-columns: repeat(8, 1fr); /* 8 columns */
+  grid-template-rows: repeat(8, 1fr);    /* 8 rows */
+}
+
+.checkerboard-pattern .cell {
+  width: 100%;
+  height: 100%;
+}
+
+.checkerboard-pattern .cell.black {
+  background-color: var(--black);
+}
+
+.checkerboard-pattern .cell.white {
+  background-color: var(--white);
+}
+
 /* ---------- UI ELEMENTS ---------- */
 
 p {
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
+  background: var(--ui-text-bg);
+  color: var(--white);
   padding: 2vh 4vh;
   display: inline-block;
   cursor: default;
@@ -581,7 +703,7 @@ p {
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  border: 2px solid #ffffff;
+  border: 2px solid var(--ui-border);
 }
 
 #banner {
@@ -592,7 +714,7 @@ p {
   font-size: 1.2em;
   text-transform: uppercase;
   letter-spacing: 2px;
-  background-color: #000000;
+  background-color: var(--black);
 }
 
 #date {
